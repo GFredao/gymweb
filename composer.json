@@ -1,0 +1,26 @@
+{
+    "name": "trabalho-de-graduacao/gymweb",
+    "description": "Sistema de Gestao de Treinos e Dietas com PHP e MySQL",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabiano Silva",
+            "email": "fabiano.msrc@outlook.com"
+        },
+        {
+            "name": "Gabriel Frederico",
+            "email": "biel_frederico@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "file": ["config/config.php"]
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4"
+    }
+}
