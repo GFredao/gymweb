@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Banco;
 
 use App\Banco\Contracts\DatabaseManagerInterface;
+use App\Core\Model;
 
 class Banco implements DatabaseManagerInterface
 {
@@ -65,6 +66,42 @@ class Banco implements DatabaseManagerInterface
         } catch (\PDOException $exception) {
             $this->falha = $exception;
             return null;
+        }
+    }
+
+    public function leitura(?string $termos = null, ?string $parametros = null, string $colunas = '*'): ?\PDOStatement
+    {
+        try {
+            //code...
+        } catch (\PDOStatement $exception) {
+            $this->falha = $exception;
+            return null;
+        }
+    }
+
+    /**
+     * @param string $termos
+     * @param string|null $parametros
+     * @return boolean
+     */
+    public function excluir(string $termos, ?string $parametros = null): bool
+    {
+        try {
+            $query = "DELETE FROM " . Model::obtemONomeDaTabela() . " WHERE $termos";
+
+            $stmt = self::$conexao->prepare($query);
+
+            if ($parametros) {
+                parse_str($parametros, $parametrosSaida);
+                $stmt->execute($parametrosSaida);
+                return true;
+            }
+
+            $stmt->execute();
+            return true;
+        } catch (\PDOException $exception) {
+            $this->falha = $exception;
+            return false;
         }
     }
 }

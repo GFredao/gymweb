@@ -14,6 +14,11 @@ class PagesController extends Controller
         echo View::make('pages/index');
     }
 
+    public function home()
+    {
+        echo View::make('pages/home');
+    }
+
     public function sobre()
     {
         echo View::make('pages/sobre');
@@ -21,7 +26,13 @@ class PagesController extends Controller
 
     public function contato()
     {
-        echo View::make('pages/contato');
+        $informacoes = [
+            'nome' => 'John Doe',
+            'email' => 'john.doe@email.com',
+            'fone' => '(00) 0000-0000'
+        ];
+
+        echo View::make('pages/contato', $informacoes);
     }
 
     public function parceria()
