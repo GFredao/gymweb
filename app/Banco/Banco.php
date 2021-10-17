@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Banco;
 
 use App\Banco\Contracts\DatabaseManagerInterface;
-use App\Core\Model;
+use App\Models\Model;
 
 class Banco implements DatabaseManagerInterface
 {
@@ -69,11 +69,63 @@ class Banco implements DatabaseManagerInterface
         }
     }
 
+    /**
+     * @param string|null $termos
+     * @param string|null $parametros
+     * @param string $colunas
+     * @return \PDOStatement|null
+     */
     public function leitura(?string $termos = null, ?string $parametros = null, string $colunas = '*'): ?\PDOStatement
     {
         try {
+            if (is_array($colunas)) {
+                $colunas = implode(', ', $colunas);
+            }
+
+            $query = "SELECT $colunas FROM " . Model::obtemONomeDaTabela();
+
+            if ($termos) {
+                $query .= " WHERE $termos";
+            }
+
+            $stmt = self::$conexao->prepare($query);
+
+            if ($parametros) {
+                parse_str($parametros, $resultado);
+
+                $resultado = array_map('trim', $resultado);
+                $arrChaves = str_replace('_', '', array_keys($resultado));
+                $resultado = array_combine($arrChaves, $resultado);
+
+                foreach ($resultado as $chave => $valor) {
+                    $tipo = (is_numeric($valor) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+                    $stmt->bindValue(':' . $chave, $valor, $tipo);
+                }
+            }
+
+            $stmt->execute();
+            return $stmt;
+        } catch (\PDOException $exception) {
+            $this->falha = $exception;
+            return null;
+        }
+    }
+
+    public function criar(array $dados): ?int
+    {
+        try {
             //code...
-        } catch (\PDOStatement $exception) {
+        } catch (\PDOException $exception) {
+            $this->falha = $exception;
+            return null;
+        }
+    }
+
+    public function atualizar(array $dados, string $termos, string $parametros): ?int
+    {
+        try {
+            //code...
+        } catch (\PDOException $exception) {
             $this->falha = $exception;
             return null;
         }
