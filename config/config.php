@@ -1,5 +1,9 @@
 <?php
 
+define('NOMEAPP', 'Gymweb | Treinos e Dietas');
+
+define('URLBASE', 'https://localhost/gymweb');
+
 define('MYSQL_DSN', 'mysql:host=127.0.0.1;dbport=3306;dbname=gymweb');
 
 define('DB_USER', 'root');
