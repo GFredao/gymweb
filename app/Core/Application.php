@@ -24,6 +24,7 @@ class Application
 
     public function run()
     {
+        $this->banco->conecta();
         $this->core->resolve();
     }
 
