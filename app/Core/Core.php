@@ -25,7 +25,7 @@ class Core
     public function resolve()
     {
         $url = $this->parseUrl();
-        
+
         if (! isset($url)) {
             $classeController = NAMESPACE_CONTROLLER . ucwords($this->currentController) . 'Controller';
             $this->currentController = new $classeController();
@@ -46,10 +46,10 @@ class Core
 
             $this->currentController = $url[0];
             unset($url[0]);
-        }
 
-        $classeController = NAMESPACE_CONTROLLER . ucwords($this->currentController) . 'Controller';
-        $this->currentController = new $classeController();
+            $classeController = NAMESPACE_CONTROLLER . ucwords($this->currentController) . 'Controller';
+            $this->currentController = new $classeController();
+        }
 
         if (isset($url[1]) && ! empty($url[1])) {
             if (! method_exists($this->currentController, $url[1])) {
