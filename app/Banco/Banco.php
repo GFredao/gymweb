@@ -111,10 +111,28 @@ class Banco implements DatabaseManagerInterface
         }
     }
 
+    /**
+     * @param array $dados
+     * @return integer|null
+     */
     public function criar(array $dados): ?int
     {
         try {
-            //code...
+            $valores = '';
+            for ($i = 0; $i < count(array_keys($dados)); $i++) {
+                $valores .= '?, ';
+            }
+
+            $query = 'INSERT INTO ' . Model::obtemONomeDaTabela() . ' (' . implode(', ', array_keys($dados)) . ') VALUES (' . rtrim($valores, ', ') . ')';
+
+            $stmt = self::$conexao->prepare($query);
+
+            for ($i = 1; $i <= count($valores = array_values($dados)); $i++) {
+                $stmt->bindValue($i, $valores[$i - 1]);
+            }
+
+            $stmt->execute();
+            return (int)self::$conexao->lastInsertId();
         } catch (\PDOException $exception) {
             $this->falha = $exception;
             return null;
@@ -124,7 +142,24 @@ class Banco implements DatabaseManagerInterface
     public function atualizar(array $dados, string $termos, string $parametros): ?int
     {
         try {
-            //code...
+            $dataSet = [];
+            foreach (array_keys($dados) as $bind) {
+                $dataSet[] = "$bind = :$bind";
+            }
+
+            $dataSet = implode(', ', $dataSet);
+
+            parse_str($parametros, $resultado);
+            $resultado = array_map('trim', $resultado);
+            $filtro = str_replace('_', '', array_keys($resultado));
+            $resultado = array_combine($filtro, $resultado);
+
+            $query = "UPDATE " . Model::obtemONomeDaTabela() . " SET $dataSet WHERE $termos";
+
+            $stmt = self::$conexao->prepare($query);
+
+            $stmt->execute(array_merge($dados, $resultado));
+            return $stmt->rowCount() ?? 1;
         } catch (\PDOException $exception) {
             $this->falha = $exception;
             return null;
@@ -144,8 +179,12 @@ class Banco implements DatabaseManagerInterface
             $stmt = self::$conexao->prepare($query);
 
             if ($parametros) {
-                parse_str($parametros, $parametrosSaida);
-                $stmt->execute($parametrosSaida);
+                parse_str($parametros, $resultado);
+                $resultado = array_map('trim', $resultado);
+                $filtro = str_replace('_', '', array_keys($resultado));
+                $resultado = array_combine($filtro, $resultado);
+
+                $stmt->execute($resultado);
                 return true;
             }
 
