@@ -84,11 +84,11 @@ abstract class Model
         return app()->banco->atualizar($this->filtro($dados), $termos, $parametros);
     }
 
-    public function ler(array $dados, string $termos, string $parametros): ?\PDOStatement
+    public function ler(?string $termos = null, ?string $parametros = null, string $colunas = '*'): ?\PDOStatement
     {
         self::$instancia = static::class;
 
-        return app()->banco->leitura($dados, $termos, $parametros);
+        return app()->banco->leitura($termos, $parametros, $colunas);
     }
 
     /**
