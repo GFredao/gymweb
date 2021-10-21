@@ -12,7 +12,7 @@ class Banco implements DatabaseManagerInterface
     /** @var \PDO */
     protected static $conexao;
 
-    /** @var \PDOException */
+    /** @var \PDOException|null */
     protected $falha;
 
     private const OPCOES = [
