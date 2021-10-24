@@ -8,6 +8,6 @@ class Admin extends Model
 {
     public function __construct()
     {
-        parent::__construct('pessoas', [], []);
+        parent::__construct('pessoas', ['id'], ['nome_completo', 'email', 'senha']);
     }
 }
