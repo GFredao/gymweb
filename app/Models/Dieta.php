@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class Admin extends Model
+class Dieta extends Model
 {
     public function __construct()
     {
-        parent::__construct('pessoas', [], []);
+        parent::__construct('dietas', [], []);
     }
 }

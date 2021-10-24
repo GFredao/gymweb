@@ -23,7 +23,7 @@ abstract class Model
     {
         self::$entidade = $entidade;
         $this->camposProtegidos = array_merge($camposProtegidos, ['data_cadastro', 'data_atualizacao']);
-        $this->camposObrigatorios = $camposProtegidos;
+        $this->camposObrigatorios = $camposObrigatorios;
     }
 
     public function __set($nome, $valor)
@@ -84,18 +84,58 @@ abstract class Model
         return app()->banco->atualizar($this->filtro($dados), $termos, $parametros);
     }
 
-    public function ler(?string $termos = null, ?string $parametros = null, string $colunas = '*'): ?\PDOStatement
+    public function salvar(): bool
     {
-        self::$instancia = static::class;
+        if (! $this->camposObrigatorios()) {
+            echo 'Preencha todos os campos obrigatórios';
+            return false;
+        }
 
-        return app()->banco->leitura($termos, $parametros, $colunas);
+        # Se o usuário já existe, atualize os dados.
+        if (! empty($this->id)) {
+            $id = (int)$this->id;
+
+            $this->atualizar($this->estaSeguro(), "id = :id", "id = $id");
+            if ($this->falha()) {
+                echo 'Erro ao atualizar registro. Verifique os dados e tente novamente.';
+                return false;
+            }
+        }
+
+        # Se o usuário não existe, efetue o cadastro.
+        if (empty($this->id)) {
+            $id = $this->criar($this->estaSeguro());
+
+            if ($this->falha()) {
+                echo 'Erro ao cadastrar cliente. Verifique os dados e tente novamente.';
+                return false;
+            }
+        }
+
+        $this->dados = $this->buscaPorId($id)->dados();
+        return true;
+    }
+
+    /**
+     * @param integer $id
+     * @param string $colunas
+     * @return Model|null
+     */
+    public function buscaPorId(int $id, string $colunas = '*'): ?Model
+    {
+        $busca = $this->where("id = :id", "id = $id", $colunas)->fetchObject(static::class);
+        if (! $busca) {
+            return null;
+        }
+
+        return $busca;
     }
 
     /**
      * Retorna uma nova instancia da classe solicitada em forma de array com todos os resultados da busca
      * @return array
      */
-    public function lerTudo(): array
+    public function buscaCompleta(): array
     {
         self::$instancia = static::class;
 
