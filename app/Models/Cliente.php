@@ -20,14 +20,14 @@ class Cliente extends Model
         return $this;
     }
 
-    public function buscaPorEmail(string $email, string $colunas = '*'): ?Cliente
+    public function buscaPorEmail(string $email, string $colunas = '*')
     {
-        $busca = $this->where("email = :email", "email = $email", $colunas)->fetchObject(__CLASS__);
+        $busca = $this->where("email = :email", "email = $email", $colunas);
         if (! $busca) {
             return null;
         }
 
-        return $busca;
+        return $busca->fetchObject(__CLASS__);
     }
 
     public function salvar(): bool
@@ -61,6 +61,7 @@ class Cliente extends Model
             }
 
             $idCliente = $this->criar($this->estaSeguro());
+
             if ($this->falha()) {
                 echo 'Erro ao efetuar cadastro.';
                 return false;

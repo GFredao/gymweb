@@ -12,4 +12,19 @@ class PagesController extends Controller
     {
         echo View::make('pages/home');
     }
+
+    public function home(): void
+    {
+        echo View::make('pages/home');
+    }
+
+    public function sobre(): void
+    {
+        echo View::make('pages/sobre');
+    }
+
+    public function contato(): void
+    {
+        echo View::make('pages/contato');
+    }
 }
