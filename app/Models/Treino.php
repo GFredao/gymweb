@@ -8,6 +8,6 @@ class Treino extends Model
 {
     public function __construct()
     {
-        parent::__construct('treinos', ['id'], ['nome', 'descricao');
+        parent::__construct('treinos', ['id'], ['nome', 'descricao']);
     }
 }
