@@ -17,4 +17,9 @@ class AccountController extends Controller
     {
         echo View::make('signin');
     }
+
+    public function signup(): void
+    {
+        echo View::make('signup');
+    }
 }
