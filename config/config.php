@@ -18,4 +18,6 @@ define('CAMINHO_VIEW', dirname(__DIR__) . '/views/');
 
 define('HTML_HEADER', dirname(__DIR__) . '/views/layouts/header.php');
 
+define('HTML_NAVTOP', dirname(__DIR__) . '/views/layouts/navtop.php');
+
 define('HTML_FOOTER', dirname(__DIR__) . '/views/layouts/footer.php');
