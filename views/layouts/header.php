@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="<?= URLBASE ?>/public/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="<?= URLBASE ?>/public/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?= URLBASE ?>/public/assets/css/azzara.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
 
     <script src="<?= URLBASE ?>/public/assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
